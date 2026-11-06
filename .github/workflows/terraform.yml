@@ -1,0 +1,28 @@
+name: terraform
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.9.8
+
+      - name: fmt
+        run: terraform fmt -check -recursive
+
+      - name: init
+        run: terraform init -input=false
+
+      - name: validate
+        run: terraform validate
+
+      - name: plan
+        run: terraform plan -input=false -no-color
